@@ -1,11 +1,12 @@
-function greet(name) {
-    return 'Hello, ' + name;
+function greet(name, language = 'en') {
+    const greetings = {
+        en: 'Hello',
+        es: 'Hola',
+        fr: 'Bonjour',
+        de: 'Hallo',
+        it: 'Ciao',
+        // Add more languages as needed
+    };
+
+    return (greetings[language] || greetings['en']) + ', ' + name;
 }
-
-console.log(greet('Bob'));
-
-function greet(name) {
-    return 'Hello, ' + name;
-}
-
-console.log(greet('Sam'));

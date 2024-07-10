@@ -11,17 +11,30 @@
     <h2>Greet Function</h2>
     <div x-data="greet()">
         <input type="text" x-model="name" placeholder="Enter a name">
+        <select x-model="language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+        </select>
         <button @click="updateGreeting()">Greet</button>
         <p x-text="greeting"></p>
     </div>
-
+    
     <script>
         function greet() {
             return {
                 name: '',
+                language: 'en',
                 greeting: '',
                 updateGreeting() {
-                    this.greeting = this.name ? 'Hello, ' + this.name : '';
+                    const greetings = {
+                        en: 'Hello',
+                        es: 'Hola',
+                        fr: 'Bonjour',
+                        de: 'Hallo'
+                    };
+                    this.greeting = this.name ? `${greetings[this.language]}, ${this.name}` : '';
                 }
             };
         }
@@ -30,12 +43,13 @@
 <h2>Transport Fee Function</h2>
 
 <div x-data="transportFeeCalculator()">
-    <label>Select shift:</label>
-    <select x-model="selectedShift">
-        <option value="morning">Morning</option>
-        <option value="afternoon">Afternoon</option>
-        <option value="nightshift">Night Shift</option>
-    </select>
+    <label>Select shift:</label><br>
+    <input type="radio" id="morning" value="morning" x-model="selectedShift">
+    <label for="morning">Morning</label><br>
+    <input type="radio" id="afternoon" value="afternoon" x-model="selectedShift">
+    <label for="afternoon">Afternoon</label><br>
+    <input type="radio" id="nightshift" value="nightshift" x-model="selectedShift">
+    <label for="nightshift">Night Shift</label><br>
     <button @click="calculateFee()">Calculate Fee</button>
     <p x-text="fee"></p>
 </div>
@@ -65,6 +79,7 @@
     }
 </script>
 
+
 <h2>Phone Bill Function</h2>
 
 <div x-data="phoneBillCalculator()">
@@ -84,8 +99,8 @@
                 const costPerCall = 2.75;
                 const costPerSms = 0.65;
 
-                // Split input data into items
-                const items = this.inputData.split(', ');
+                // Split input data into items, trimming whitespace
+                const items = this.inputData.split(',').map(item => item.trim());
 
                 // Initialize counters
                 let calls = 0;
@@ -138,15 +153,15 @@
                 const costPerData = 12.00;
                 const costPerSMS = 0.75;
 
-                const usages = this.usage.split(',');
+                const usages = this.usage.split(',').map(item => item.trim());
 
                 let totalCost = 0;
                 usages.forEach(item => {
-                    if (item.trim() === 'call') {
+                    if (item === 'call') {
                         totalCost += costPerCall;
-                    } else if (item.trim() === 'data') {
+                    } else if (item === 'data') {
                         totalCost += costPerData;
-                    } else if (item.trim() === 'sms') {
+                    } else if (item === 'sms') {
                         totalCost += costPerSMS;
                     }
                 });
