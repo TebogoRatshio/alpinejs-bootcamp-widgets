@@ -1,12 +1,22 @@
-function greet(name, language = 'en') {
-    const greetings = {
-        en: 'Hello',
-        es: 'Hola',
-        fr: 'Bonjour',
-        de: 'Hallo',
-        it: 'Ciao',
-        // Add more languages as needed
+function greet() {
+    return {
+        name: '',
+        language: 'en',
+        greeting: '',
+        updateGreeting() {
+            const greetings = {
+                en: 'Hello',
+                es: 'Hola',
+                fr: 'Bonjour',
+                de: 'Hallo'
+            };
+            this.greeting = this.name ? `${greetings[this.language]}, ${this.name}` : '';
+        }
     };
-
-    return (greetings[language] || greetings['en']) + ', ' + name;
 }
+
+    
+
+document.addEventListener('alpine:init', function () {
+    Alpine.data('greet',  greet)
+});

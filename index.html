@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpine.js Component Example</title>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <script src="greet.js"></script>
+    <script src="transportFee.js"></script>
+    <script src="totalPhoneBill.js"></script>
+    <script src="enoughAirtime.js"></script>
 </head>
 <body>
 
@@ -20,164 +24,42 @@
         <button @click="updateGreeting()">Greet</button>
         <p x-text="greeting"></p>
     </div>
-    
-    <script>
-        function greet() {
-            return {
-                name: '',
-                language: 'en',
-                greeting: '',
-                updateGreeting() {
-                    const greetings = {
-                        en: 'Hello',
-                        es: 'Hola',
-                        fr: 'Bonjour',
-                        de: 'Hallo'
-                    };
-                    this.greeting = this.name ? `${greetings[this.language]}, ${this.name}` : '';
-                }
-            };
-        }
-    </script>
 
-<h2>Transport Fee Function</h2>
-
-<div x-data="transportFeeCalculator()">
-    <label>Select shift:</label><br>
-    <input type="radio" id="morning" value="morning" x-model="selectedShift">
-    <label for="morning">Morning</label><br>
-    <input type="radio" id="afternoon" value="afternoon" x-model="selectedShift">
-    <label for="afternoon">Afternoon</label><br>
-    <input type="radio" id="nightshift" value="nightshift" x-model="selectedShift">
-    <label for="nightshift">Night Shift</label><br>
-    <button @click="calculateFee()">Calculate Fee</button>
-    <p x-text="fee"></p>
-</div>
-
-<script>
-    function transportFeeCalculator() {
-        return {
-            selectedShift: 'morning',
-            fee: '',
-
-            calculateFee() {
-                switch (this.selectedShift) {
-                    case 'morning':
-                        this.fee = 'R20';
-                        break;
-                    case 'afternoon':
-                        this.fee = 'R10';
-                        break;
-                    case 'nightshift':
-                        this.fee = 'Free';
-                        break;
-                    default:
-                        this.fee = 'Invalid shift';
-                }
-            }
-        };
-    }
-</script>
-
-
-<h2>Phone Bill Function</h2>
-
-<div x-data="phoneBillCalculator()">
-    <label>Enter data (comma-separated):</label>
-    <input type="text" x-model="inputData">
-    <button @click="calculateBill()">Calculate Bill</button>
-    <p x-text="totalBill"></p>
-</div>
-
-<script>
-    function phoneBillCalculator() {
-        return {
-            inputData: '',
-            totalBill: '',
-
-            calculateBill() {
-                const costPerCall = 2.75;
-                const costPerSms = 0.65;
-
-                // Split input data into items, trimming whitespace
-                const items = this.inputData.split(',').map(item => item.trim());
-
-                // Initialize counters
-                let calls = 0;
-                let sms = 0;
-
-                // Count calls and sms
-                items.forEach(item => {
-                    if (item === 'call') {
-                        calls++;
-                    } else if (item === 'sms') {
-                        sms++;
-                    }
-                });
-
-                // Calculate total bill
-                let total = calls * costPerCall + sms * costPerSms;
-
-                // Format total bill as 'R' currency
-                this.totalBill = 'R' + total.toFixed(2);
-            }
-        };
-    }
-</script>
-
-<h2>Airtime Function</h2>
-
-<div x-data="airtimeCalculator()">
-    <label for="usage">Usage (comma-separated: call, data, sms):</label>
-    <input type="text" id="usage" x-model="usage" placeholder="e.g., call,data,sms"><br><br>
-    
-    <label for="availableAirtime">Available Airtime (R):</label>
-    <input type="number" id="availableAirtime" x-model="availableAirtime"><br><br>
-    
-    <button @click="calculateRemainingAirtime()">Check Remaining Airtime</button><br><br>
-    
-    <div x-show="result !== null">
-        <p>Remaining Airtime: <span x-text="result"></span></p>
+    <h2>Transport Fee Function</h2>
+    <div x-data="transportFeeCalculator()">
+        <label>Select shift:</label><br>
+        <input type="radio" id="morning" value="morning" x-model="selectedShift">
+        <label for="morning">Morning</label><br>
+        <input type="radio" id="afternoon" value="afternoon" x-model="selectedShift">
+        <label for="afternoon">Afternoon</label><br>
+        <input type="radio" id="nightshift" value="nightshift" x-model="selectedShift">
+        <label for="nightshift">Night Shift</label><br>
+        <button @click="calculateFee()">Calculate Fee</button>
+        <p x-text="fee"></p>
     </div>
-</div>
 
-<script>
-    function airtimeCalculator() {
-        return {
-            usage: '',
-            availableAirtime: 0,
-            result: null,
+    <h2>Phone Bill Function</h2>
+    <div x-data="phoneBillCalculator()">
+        <label>Enter data (comma-separated):</label>
+        <input type="text" x-model="inputData">
+        <button @click="calculateBill()">Calculate Bill</button>
+        <p x-text="totalBill"></p>
+    </div>
 
-            calculateRemainingAirtime() {
-                const costPerCall = 1.88;
-                const costPerData = 12.00;
-                const costPerSMS = 0.75;
-
-                const usages = this.usage.split(',').map(item => item.trim());
-
-                let totalCost = 0;
-                usages.forEach(item => {
-                    if (item === 'call') {
-                        totalCost += costPerCall;
-                    } else if (item === 'data') {
-                        totalCost += costPerData;
-                    } else if (item === 'sms') {
-                        totalCost += costPerSMS;
-                    }
-                });
-
-                let remainingAirtime = this.availableAirtime - totalCost;
-
-                if (remainingAirtime < 0) {
-                    this.result = 'R0.00';
-                } else {
-                    this.result = 'R' + remainingAirtime.toFixed(2);
-                }
-            }
-        };
-    }
-</script>
-
+    <h2>Airtime Function</h2>
+    <div x-data="airtimeCalculator()">
+        <label for="usage">Usage (comma-separated: call, data, sms):</label>
+        <input type="text" id="usage" x-model="usage" placeholder="e.g., call,data,sms"><br><br>
+        
+        <label for="availableAirtime">Available Airtime (R):</label>
+        <input type="number" id="availableAirtime" x-model="availableAirtime"><br><br>
+        
+        <button @click="calculateRemainingAirtime()">Check Remaining Airtime</button><br><br>
+        
+        <div x-show="result !== null">
+            <p>Remaining Airtime: <span x-text="result"></span></p>
+        </div>
+    </div>
 
 </body>
 </html>

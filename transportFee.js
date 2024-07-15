@@ -1,16 +1,27 @@
-function transportFee(shift) {
-    switch (shift) {
-        case 'morning':
-            return 'R20';
-        case 'afternoon':
-            return 'R10';
-        case 'nightshift':
-            return 'free';
-        default:
-            return 'Invalid shift';
-    }
+function transportFeeCalculator() {
+    return {
+        selectedShift: 'morning',
+        fee: '',
+
+        calculateFee() {
+            switch (this.selectedShift) {
+                case 'morning':
+                    this.fee = 'R20';
+                    break;
+                case 'afternoon':
+                    this.fee = 'R10';
+                    break;
+                case 'nightshift':
+                    this.fee = 'Free';
+                    break;
+                default:
+                    this.fee = 'Invalid shift';
+            }
+        }
+    };
 }
 
-console.log(transportFee('morning')); 
-console.log(transportFee('afternoon')); 
-console.log(transportFee('nightshift')); 
+
+document.addEventListener('alpine:init', function () {
+    Alpine.data('transportFee',  transportFee)
+});
